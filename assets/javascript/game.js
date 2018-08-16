@@ -4,32 +4,29 @@ let currentWord = ''
 let guessLeft = 10
 let hiddenWord = ''
 let guessedLetters = []
-const allWords = ['Genesis', 'Blondie', 'Billy Idol', 'Depeche Mode'];
+const allWords = ['Genesis', 'Blondie', ''];
 let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
 
 function setHiddenWord() {
     let tmpWord = ''
     for (let i = 0; i < (currentWord.length * 2); i++) {
         if (i === 0 || i % 2 === 0) {
-            tmpWord += '_';
+            tmpWord += '_'
             // Underscore represents word
         }
         else {
-            tmpWord += '_';
+            tmpWord += ' '
             // Blank is simply in between
         }
     }
-    return tmpWord 
+    return tmpWord
 }
 
 function setCurrentWord() {
-    let wordIndex = Math.floor(Math.random() * allWords.length);;
-    return allWords[wordIndex];
-}
-
-
-function wordChecker() {
-
+    let wordIndex = Math.floor(Math.random() * allWords.length)
+    console.log(allWords[wordIndex])
+    return allWords[wordIndex]
 }
 
 function alphaCheck(letter) {
@@ -72,27 +69,37 @@ function lose() {
     guessLeft--
     displayValues()
     if (guessLeft <= 0) {
-        document.querySelector('#message').innerHTML = "You lost! Try again."
-        reset()
+        document.querySelector('#message').innerHTML = `<h1>You lost! Press any key to try again.</h1>`
     }
 }
 
+function win() {
+    winWord = hiddenWord.split(' ').join('')
+    if(winWord === currentWord) {
+        score++
+        document.querySelector('#message').innerHTML = `<h1>You won! Press any key to continue.</h1>`
+    }
+}
 
 function reset() {
     currentWord = setCurrentWord()
     hiddenWord = setHiddenWord()
     guessLeft = 10
     guessedLetters = []
+    document.querySelector('#hidden_word').innerHTML = hiddenWord
     document.querySelector('#message').innerHTML = "Press any key to get started!"
     document.querySelector('#guessLeft').innerHTML = '' + guessLeft
     document.querySelector('#wins').innerHTML = '' + score
     document.querySelector('#letGuessed').innerHTML = '' + guessedLetters.toString()
-  }
+}
 
 document.onkeyup = function (event) {
     const letter = event.key
     if (alphaCheck(letter)) {
-        if (guessLeft === 0) 
+        if (guessLeft === 0) {
+            reset()
+            return
+        }
         // Seeing whether or not letter has been guessed already
         if (guessedLetters.indexOf(letter) === -1) {
             guessedLetters.push(letter);
@@ -100,11 +107,11 @@ document.onkeyup = function (event) {
             // Can check against hidden word since new letter never seen before
             for (i = 0; i < currentWord.length; i++) {
                 if (letter === currentWord.charAt(i)) {
-                    setCharAt(hiddenWord, (i*2), letter)
-                } else {
-                    
-                }
-            }   
+                    x = setCharAt(hiddenWord, (i * 2), letter)
+                    document.querySelector('#hidden_word').innerHTML = x.toString()
+                    console.log(x)
+                } 
+            }
             lose()
             // Update UI function
         }
@@ -115,8 +122,8 @@ document.onkeyup = function (event) {
 }
 
 function setCharAt(str, index, chr) {
-    if (index > str.length -1) return str;
-    return str.substr(0,index) + chr + str.substr(index+1)
+    if (index > str.length - 1) return str;
+    return str.substr(0, index) + chr + str.substr(index + 1)
 }
 
 // CHECKKKKKKKK
