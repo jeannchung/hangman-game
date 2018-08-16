@@ -65,8 +65,10 @@ function displayValues() {
 
 }
 
-function lose() {
+function losing() {
     guessLeft--
+    document.querySelector('#guessLeft').innerHTML = '' + guessLeft
+    document.querySelector('#letGuessed').innerHTML = guessedLetters
     if (guessLeft <= 0) {
         document.querySelector('#message').innerHTML = `<h1>You lost! Press any key to try again.</h1>`
     }
@@ -86,9 +88,9 @@ function checkForWin() {
 function reset() {
     currentWord = setCurrentWord()
     hiddenWord = setHiddenWord()
+    oldScore++;
     guessLeft = 10
     guessedLetters = []
-    oldScore++
     document.querySelector('#hidden_word').innerHTML = hiddenWord
     document.querySelector('#message').innerHTML = "Press any key to get started!"
     document.querySelector('#guessLeft').innerHTML = '' + guessLeft
@@ -118,7 +120,7 @@ document.onkeyup = function (event) {
             }
 
             checkForWin()
-            //lose()
+            losing()
             // Update UI function
         }
         // If the letter isn't new, why bother checking it? We've checked it before
@@ -156,4 +158,3 @@ function setCharAt(str, index, chr) {
 // WHAT HAPPENS ON LOSS
 
 // WHAT HAPPENS ON WIN
-
